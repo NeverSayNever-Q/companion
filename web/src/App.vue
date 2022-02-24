@@ -1,84 +1,106 @@
 <template>
   <a-layout>
-    <the-header></the-header>
+    <a-layout-sider
+            breakpoint="lg"
+            collapsed-width="0"
+            width="60px"
+    >
+      <div class="logo" />
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+        <a-menu-item key="1">
+          <home-outlined />
+        </a-menu-item>
+        <a-menu-item key="2" @click="showDrawer">
+          <read-outlined />
+        </a-menu-item>
+        <a-menu-item key="3">
+          <search-outlined />
+        </a-menu-item>
+      </a-menu>
+    </a-layout-sider>
     <a-layout>
-      <a-layout-sider width="200" style="background: #fff">
-        <a-menu
-                mode="inline"
-                :style="{ height: '100%', borderRight: 0 }"
-        >
-          <a-sub-menu key="sub1">
-            <template #title>
-              <span>
-                <user-outlined />
-                subnav 1
-              </span>
-            </template>
-            <a-menu-item key="1">option1</a-menu-item>
-            <a-menu-item key="2">option2</a-menu-item>
-            <a-menu-item key="3">option3</a-menu-item>
-            <a-menu-item key="4">option4</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <template #title>
-              <span>
-                <laptop-outlined />
-                subnav 2
-              </span>
-            </template>
-            <a-menu-item key="5">option5</a-menu-item>
-            <a-menu-item key="6">option6</a-menu-item>
-            <a-menu-item key="7">option7</a-menu-item>
-            <a-menu-item key="8">option8</a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub3">
-            <template #title>
-              <span>
-                <notification-outlined />
-                subnav 3
-              </span>
-            </template>
-            <a-menu-item key="9">option9</a-menu-item>
-            <a-menu-item key="10">option10</a-menu-item>
-            <a-menu-item key="11">option11</a-menu-item>
-            <a-menu-item key="12">option12</a-menu-item>
-          </a-sub-menu>
-        </a-menu>
-      </a-layout-sider>
-      <a-layout-content
-              :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
-      >
-        Content
+      <a-layout-header :style="{ backgroundColor: 'Ivory', padding: 0 }" />
+      <a-layout-content >
+          <div :style="{ display: 'flex', minHeight: '500px' }">
+            <transition name="notebook-drawer">
+              <div class="drawer" v-show="visible" :style="{ backgroundColor: 'grey', borderRight: '-1px'}"></div>
+            </transition>
+            <transition name="note-drawer">
+              <div class="drawer" v-show="visible" :style="{ backgroundColor: 'rgb(239,228,176)'}"></div>
+            </transition>
+            <div id="editor" :style="{backgroundColor: 'rgb(112,146,190)', width: '100%', minHeight: '500px' }"></div>
+          </div>
       </a-layout-content>
+      <a-layout-footer style="text-align: center">
+        Ant Design ©2018 Created by Ant UED
+      </a-layout-footer>
     </a-layout>
-    <a-layout-footer style="text-align: center">
-     Compantion ©2021 Created by JiangQP
-    </a-layout-footer>
   </a-layout>
 </template>
-
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import TheHeader from '@/components/TheHeader.vue';
+  import { defineComponent, ref } from 'vue';
 
   export default defineComponent({
-    name: 'app',
-    components:{
-      TheHeader,
+    setup() {
+      const onCollapse = (collapsed: boolean, type: string) => {
+        console.log(collapsed, type);
+      };
+
+      const onBreakpoint = (broken: boolean) => {
+        console.log(broken);
+      };
+
+      // 抽屉
+      let visible = ref<boolean>(false);
+      const showDrawer = () => {
+        visible.value = !visible.value;
+      }
+
+      return {
+        selectedKeys: ref<string[]>(['4']),
+        onCollapse,
+        onBreakpoint,
+        showDrawer,
+        visible
+      };
     },
   });
 </script>
-
 <style>
-  .logo {
-    float: left;
-    width: 120px;
-    height: 31px;
-    margin: 16px 24px 16px 0;
-    background: rgba(255, 255, 255, 0.3);
+  #app .logo {
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px 5px 16px 5px;
+  }
+
+  .site-layout-sub-header-background {
+    background: #fff;
   }
 
   .site-layout-background {
     background: #fff;
+  }
+
+  [data-theme='dark'] .site-layout-sub-header-background {
+    background: #141414;
+  }
+
+  .drawer{
+    width: 180px;
+    border:1px solid #000
+  }
+
+  .note-drawer-enter-active,
+  .note-drawer-leave-active,
+  .notebook-drawer-enter-active,
+  .notebook-drawer-leave-active {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .note-drawer-enter-from,
+  .note-drawer-leave-to,
+  .notebook-drawer-enter-from,
+  .notebook-drawer-leave-to{
+    width: 0;
   }
 </style>
