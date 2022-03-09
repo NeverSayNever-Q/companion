@@ -41,7 +41,7 @@ public class MPAutoGenerator {
                 })
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("note") // 设置需要生成的表名
+                    builder.addInclude("category") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_"); // 设置过滤表前缀
                 })
                 // 策略配置

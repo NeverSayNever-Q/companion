@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author jiangqp
- * @since 2022-02-08
+ * @since 2022-02-28
  */
 @Getter
 @Setter
@@ -23,7 +23,7 @@ public class Note implements Serializable {
     /**
      * id
      */
-      private Long id;
+    private Long id;
 
     /**
      * 笔记本id
@@ -44,6 +44,11 @@ public class Note implements Serializable {
      * 内容
      */
     private String content;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 
 
 }
