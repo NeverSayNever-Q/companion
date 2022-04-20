@@ -1,55 +1,46 @@
 package com.nsn.companion.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * <p>
- * 笔记
+ *
  * </p>
  *
  * @author jiangqp
- * @since 2022-02-28
+ * @since 2022-03-01
  */
 @Getter
 @Setter
-public class Note implements Serializable {
+public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * id
+     * 类别ID
      */
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     /**
-     * 笔记本id
+     * 父类别ID
      */
-    private String notebookid;
+    private String parentid;
 
     /**
-     * 创建时间
+     * 名称
      */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createtime;
+    private String name;
 
     /**
-     * 标题
+     * 0：分区；1：笔记本
      */
-    private String title;
-
-    /**
-     * 内容
-     */
-    private String content;
+    private Integer type;
 
     /**
      * 排序

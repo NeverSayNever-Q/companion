@@ -1,17 +1,13 @@
 package com.nsn.companion.controller;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.nsn.companion.entity.Note;
-import com.nsn.companion.service.impl.NoteServiceImpl;
+import com.nsn.companion.service.INoteService;
 import com.nsn.companion.util.CommonResp;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -25,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/note")
 public class NoteController {
     @Resource
-    private NoteServiceImpl noteService;
+    private INoteService noteService;
 
     @GetMapping("/")
     @ApiOperation("通过notebookid获取笔记列表")
@@ -47,32 +43,40 @@ public class NoteController {
 
     @PatchMapping("/")
     @ApiOperation("更新笔记")
-    public CommonResp update(@RequestBody Map<String,String> note){
+    public CommonResp update(@RequestBody List<Note> noteList){
         CommonResp resp = new CommonResp<>();
-        if(!note.isEmpty() && (note.containsKey("id"))){
-            String id = note.get("id");
-            //自动匹配传参与实体类字段
-            UpdateWrapper<Note> noteUpdateWrapper = new UpdateWrapper<>();
-            Field[] fields = Note.class.getDeclaredFields();
-            List<Field> fieldList = Arrays.asList(fields);
-            note.forEach((k, v) ->{
-                fieldList.forEach((field) ->{
-                    if(k != "id" && field.getName() == k){
-                        noteUpdateWrapper.set(k, v);
-                    }
-                });
-            });
-            //更新
-            if(!noteUpdateWrapper.getSqlSet().isEmpty()){
-                noteUpdateWrapper.eq("id", id);
-                Boolean isSuccess = noteService.update(null, noteUpdateWrapper);
-                resp.setSuccess(isSuccess);
-            }
-        }
-        else{
-            resp.setSuccess(false);
-        }
+        noteService.updateBatchById(noteList);
+        return resp;
+    }
 
+    @DeleteMapping("/{noteId}")
+    @ApiOperation("删除笔记")
+    public CommonResp delete(@PathVariable String noteId) {
+        CommonResp resp = new CommonResp<>();
+        Boolean isSucess = noteService.removeById(noteId);
+        resp.setSuccess(isSucess);
+        return resp;
+    }
+
+    @PostMapping("/")
+    @ApiOperation("新增笔记")
+    public CommonResp Insert(@RequestBody  Note note) {
+        CommonResp<Note> resp = new CommonResp<>();
+        note.setTitle("无标题");
+        note.setContent("");
+        note.setSort(noteService.getMaxSort(note.getNotebookid()));
+        Boolean isSuccess = noteService.save(note);
+        resp.setContent(note);
+        resp.setSuccess(isSuccess);
+        return resp;
+    }
+
+    @GetMapping("/category/{noteId}")
+    @ApiOperation("获取笔记目录结构")
+    public CommonResp categoies(@PathVariable String noteId) {
+        CommonResp<List<String>> resp = new CommonResp<>();
+        List<String> routes = noteService.getRoutes(noteId);
+        resp.setContent(routes);
         return resp;
     }
 }

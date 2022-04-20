@@ -11,16 +11,18 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
-    "@ckeditor/ckeditor5-vue": "^2.0.1",
+    "@ckeditor/ckeditor5-markdown-gfm": "^33.0.0",
+    "@ckeditor/ckeditor5-vue": "^3.0.0",
     "animate.css": "^4.1.1",
     "ant-design-vue": "^2.2.8",
     "axios": "^0.26.0",
+    "ckeditor5-custom-build": "file:ckeditor5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
